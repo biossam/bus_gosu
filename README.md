@@ -1,6 +1,7 @@
 # 버스 15분 상황매칭론
 
-상황매칭론 수학 독해 사이트 — 공통수학1 · 공통수학2, 유형별 기출 4 + 변형 10.
+짧은 주소 · 홈 화면 아이콘용 바로가기입니다. 열면 Claude에 있는 사이트로 넘어갑니다.
 
-- 사이트: https://biossam.github.io/bus_gosu/
-- 기기 간 학습 기록 저장은 Claude 링크(https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL)에서 로그인했을 때만 됩니다. 이 GitHub 주소에서는 그 기기·브라우저에만 저장됩니다.
+- 바로가기: https://biossam.github.io/bus_gosu/
+- 사이트: https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL
+- Claude에 로그인해서 열면 학습 기록이 기기 간에 이어집니다.
