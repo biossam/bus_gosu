@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" fill="#FFF8EE"/>
+<circle cx="420" cy="92" r="70" fill="#FFE9B0"/>
+<g transform="translate(56 120)">
+ <rect x="0" y="20" width="400" height="230" rx="56" fill="#5B8DEF"/>
+ <rect x="0" y="180" width="400" height="70" rx="0" fill="#3D6BC6" opacity=".9"/>
+ <rect x="0" y="200" width="400" height="50" rx="40" fill="#3D6BC6"/>
+ <rect x="34" y="52" width="150" height="96" rx="22" fill="#E8F7FF"/>
+ <rect x="206" y="52" width="160" height="96" rx="22" fill="#E8F7FF"/>
+ <circle cx="96" cy="104" r="9" fill="#2A2A35"/><circle cx="130" cy="104" r="9" fill="#2A2A35"/>
+ <path d="M100 124 q13 12 26 0" stroke="#2A2A35" stroke-width="7" fill="none" stroke-linecap="round"/>
+ <circle cx="76" cy="126" r="9" fill="#FF9C8C" opacity=".8"/><circle cx="150" cy="126" r="9" fill="#FF9C8C" opacity=".8"/>
+ <text x="286" y="118" font-family="Jua, 'Apple SD Gothic Neo', sans-serif" font-size="58" font-weight="700" fill="#2A2A35" text-anchor="middle">고수</text>
+ <circle cx="96" cy="262" r="40" fill="#2A2A35"/><circle cx="96" cy="262" r="16" fill="#E9E4DB"/>
+ <circle cx="304" cy="262" r="40" fill="#2A2A35"/><circle cx="304" cy="262" r="16" fill="#E9E4DB"/>
+ <rect x="372" y="160" width="22" height="22" rx="6" fill="#FFD45C"/>
+</g></svg>
