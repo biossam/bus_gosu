@@ -10,7 +10,7 @@
  <circle cx="96" cy="104" r="9" fill="#2A2A35"/><circle cx="130" cy="104" r="9" fill="#2A2A35"/>
  <path d="M100 124 q13 12 26 0" stroke="#2A2A35" stroke-width="7" fill="none" stroke-linecap="round"/>
  <circle cx="76" cy="126" r="9" fill="#FF9C8C" opacity=".8"/><circle cx="150" cy="126" r="9" fill="#FF9C8C" opacity=".8"/>
- <text x="286" y="118" font-family="Jua, 'Apple SD Gothic Neo', sans-serif" font-size="58" font-weight="700" fill="#2A2A35" text-anchor="middle">고수</text>
+ <text x="286" y="114" font-family="Jua, 'Apple SD Gothic Neo', sans-serif" font-size="38" font-weight="700" fill="#2A2A35" text-anchor="middle">버스고수</text>
  <circle cx="96" cy="262" r="40" fill="#2A2A35"/><circle cx="96" cy="262" r="16" fill="#E9E4DB"/>
  <circle cx="304" cy="262" r="40" fill="#2A2A35"/><circle cx="304" cy="262" r="16" fill="#E9E4DB"/>
  <rect x="372" y="160" width="22" height="22" rx="6" fill="#FFD45C"/>

@@ -1,6 +1,6 @@
 {
  "name": "버스 15분 상황매칭론",
- "short_name": "상황매칭",
+ "short_name": "버스고수",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
