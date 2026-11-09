@@ -290,7 +290,13 @@ details:not([open]) summary h3::after{transform:rotate(-90deg)}
 .recbox .rbtn.stop{background:#2B2B38}.recbox .rbtn.ghost{background:transparent;color:var(--sub,#8a7f72);border:1.5px solid var(--line,#E9DCC6)}
 .recbox .rt{font-variant-numeric:tabular-nums;font-weight:800}.recbox .dot{width:10px;height:10px;border-radius:50%;background:#FF4B3A;animation:rblink 1s infinite}@keyframes rblink{50%{opacity:.2}}
 .recbox audio,.recplay audio{width:100%;margin-top:8px}.recbox .rfile{display:inline-block;font-size:13px;color:var(--sub,#8a7f72);text-decoration:underline;cursor:pointer}.recplay{margin:10px 0}
-.rtnote{margin:6px 0 10px;padding:8px 12px;border-radius:12px;background:var(--coralL);font-size:13px}</style>
+.rtnote{margin:6px 0 10px;padding:8px 12px;border-radius:12px;background:var(--coralL);font-size:13px}.pickc{display:block;width:100%;margin-top:8px;padding:11px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-weight:800;font-size:15px;cursor:pointer}
+.lplist{max-height:52vh;overflow:auto;text-align:left;margin:4px 0 10px;padding-right:2px}.lplist .lpu{font-size:12px;font-weight:800;color:var(--sub);margin:10px 2px 4px}
+.lplist button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 12px;margin:4px 0;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:14px;cursor:pointer}
+.lplist button i{width:9px;height:9px;border-radius:50%;flex:none;background:var(--gray)}.lplist button i.low{background:var(--coral)}.lplist button i.mid{background:var(--sun)}.lplist button i.high{background:var(--mint)}
+.lplist button em{margin-left:auto;font-style:normal;font-size:11px;color:var(--coral);font-weight:800}
+.lpbig{display:block;width:100%;padding:14px;margin:6px 0;border-radius:18px;border:0;font-size:16px;font-weight:800;cursor:pointer;color:#fff}.lpbig.d{background:#5B8DEF}.lpbig.s{background:var(--mint)}.lpbig.c{background:#FFC23D;color:#3A2E12}.lpbig small{display:block;font-size:12px;font-weight:600;opacity:.9;margin-top:2px}
+</style>
 </head>
 <body>
 <main id="main"></main>
@@ -927,7 +933,7 @@ function homeHTML(){
       <div><b>복습 대기</b><span>${due}개념</span></div>
       <div><b>오답 재도전</b><span>${wr}문제</span></div>
     </div>
-    <button class="big" data-act="start">${done?'한 번 더 시작':'시작하기'} ▶</button>
+    <button class="big" data-act="start">${done?'한 번 더 시작':'시작하기'} ▶</button><button class="pickc" data-lp="pick">📘 개념 골라서 15분</button>
   </section>
   <div class="quick"><button class="qb lib" data-act="shelfopen"><span class="qi">📚</span><b>나의 서재</b><small>이해한 개념 ${CONCEPTS.filter(c=>onShelf(c.id)).length}권 · 🐾 ${catSync()}마리</small></button><button class="qb map" data-act="mapopen"><span class="qi">🗺️</span><b>개념 지도</b><small>${esc(rangeName())} · ${ids.filter(id=>{const m=mastery(id);return m!=null&&m>=.8}).length}/${ids.length} 완성</small></button></div>
   ${dailyHTML()}
@@ -1012,14 +1018,14 @@ function settingsHTML(){
 
 // ===== 학습 실행기 =====
 // RUN = {mode, title, steps:[...], i, start}
-function startSession(){
-  const ch=chooseBlank();const steps=[];
+function startSession(cidSel){
+  const ch=(typeof cidSel==='string'&&C[cidSel])?{cid:cidSel,isNew:!(S.c[cidSel]&&S.c[cidSel].seen)}:chooseBlank();const steps=[];
   const fc=flashCards(ch.cid);if(fc.length)steps.push({k:'flash',cards:fc,j:0,show:false,res:[]});
   if(ch.isNew)steps.push({k:'learn',cid:ch.cid});
   steps.push({k:'blank',cids:[ch.cid],phase:'write',checked:{},t0:null});
   steps.push({k:'probs',list:null,j:0,ans:null,res:[],auto:true});
   steps.push({k:'done'});
-  RUN={mode:'session',title:'오늘의 15분',steps,i:0,start:Date.now(),blankCid:ch.cid,re:startSession};
+  RUN={mode:'session',title:'오늘의 15분',steps,i:0,start:Date.now(),blankCid:ch.cid,re:()=>startSession(ch.cid)};
   go('run');startTick();
 }
 function startBlank(cids,title){RUN={mode:'blank',title,steps:[{k:'blank',cids,phase:'write',checked:{},t0:null},{k:'done'}],i:0,start:Date.now(),re:()=>startBlank(cids,title)};go('run');startTick()}
@@ -1270,6 +1276,23 @@ async function recStart(){
 document.addEventListener('click',e=>{const b=e.target.closest('[data-rec]');if(!b)return;e.preventDefault();e.stopPropagation();const a=b.dataset.rec;
   if(a==='start')recStart();else if(a==='stop'){if(REC.mr)REC.mr.stop()}else if(a==='again'){if(REC.url)URL.revokeObjectURL(REC.url);REC.url=null;recStart()}},true);
 document.addEventListener('change',e=>{const i=e.target.closest('[data-recfile]');if(!i||!i.files||!i.files[0])return;if(REC.url)URL.revokeObjectURL(REC.url);REC.url=URL.createObjectURL(i.files[0]);REC.err=false;recPaint()});
+
+// ===== LAUNCH_PATCH: 접속하면 무엇부터 할지 고르기 =====
+function lpDaily(){const rn=Math.min(5,(typeof retryLeft==='function')?retryLeft():0);const l=pickDaily();return startProbs(l,rn?`지난 오답 ${rn} + 오늘의 3문제`:'오늘의 3문제','daily')}
+function lpConcepts(){const ids=rangeIds();const units=[...new Set(ids.map(id=>C[id].u))];
+  const dot=id=>{const m=mastery(id);return m==null?'':m<.5?'low':m<.8?'mid':'high'};
+  return `<div class="lplist">${units.map(u=>`<div class="lpu">${esc(UNITS[u].t)}</div>`+ids.filter(id=>C[id].u===u).map(id=>`<button data-lpc="${id}"><i class="${dot(id)}"></i><span>${esc(C[id].t)}</span>${!(S.c[id]&&S.c[id].seen)?'<em>NEW</em>':''}</button>`).join('')).join('')}</div>`}
+function lpPick(){ask('📘','어떤 개념으로 15분 할까요?','고른 개념으로 플래시 복습 → 백지 테스트 → 맞춤 문제가 열려요.',[],'닫기',lpConcepts())}
+function lpOpen(){const t=dailyToday?dailyToday():0;const ch=chooseBlank();
+  ask('🚌','오늘은 무엇부터 할까요?','',[],'둘러보기',
+   `<button class="lpbig d" data-lp="daily">📅 오늘의 3문제${t>=3?' (완료 ✓)':t?` (${t}/3)`:''}<small>${(typeof retryLeft==='function'&&retryLeft())?'지난 오답부터 다시 풀고 새 3문제':'시험 대비 매일 3문제'}</small></button>
+    <button class="lpbig s" data-lp="auto">✨ 추천 15분<small>${esc(C[ch.cid].t)}${ch.isNew?' · NEW':' · 복습'}</small></button>
+    <button class="lpbig c" data-lp="pick">📘 개념 골라서 15분<small>내가 고른 개념으로 백지 테스트</small></button>`)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-lp],[data-lpc]');if(!b)return;e.preventDefault();e.stopPropagation();
+  if(b.dataset.lpc){closeModal();startSession(b.dataset.lpc);return}
+  const a=b.dataset.lp;if(a==='daily'){closeModal();lpDaily()}else if(a==='auto'){closeModal();startSession()}else if(a==='pick')lpPick()},true);
+(function lpBoot(n){const md=document.getElementById('modal');if(md&&md.classList.contains('on')){if(n<40)setTimeout(()=>lpBoot(n+1),500);return}
+  if(VIEW==='home'&&!RUN)lpOpen()})(0);
 </script>
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))</script></body>
 </html>
