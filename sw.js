@@ -1,5 +1,5 @@
 // 오프라인용 서비스 워커: 페이지는 인터넷 우선(3초) → 안 되면 저장본, 나머지는 저장본 우선
-const V='v2';const CORE=['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
+const V='v2-'+new URL(self.registration.scope).pathname;const CORE=['./','./index.html','./app.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE.map(u=>new Request(u,{cache:'reload'})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 function timeout(ms){return new Promise((_,rj)=>setTimeout(rj,ms))}
