@@ -73,5 +73,5 @@ h1{font-size:24px;margin:14px 0 2px}.sub{color:var(--sub);font-size:14px;margin:
   }
 })();
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))</script></body>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).catch(()=>{}))</script></body>
 </html>
