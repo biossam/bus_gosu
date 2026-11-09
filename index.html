@@ -73,5 +73,6 @@ h1{font-size:24px;margin:14px 0 2px}.sub{color:var(--sub);font-size:14px;margin:
   }
 })();
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).catch(()=>{}))</script></body>
+<script>if("serviceWorker" in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload()}});addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{}))}
+async function hardRefresh(){try{if(window.caches){for(const k of await caches.keys())await caches.delete(k)}if(navigator.serviceWorker){for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister()}}catch(e){}location.replace(location.pathname+"?r="+Date.now())}</script></body>
 </html>

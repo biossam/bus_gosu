@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="버스고수"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF8EE">
+<head><script>var APPVER="11-10 01:16"</script><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="버스고수"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF8EE">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>버스고수</title>
@@ -1012,7 +1012,7 @@ function settingsHTML(){
   ${[['1-1','공통수학1'],['2-2','공통수학2'],['PS','확률과 통계'],['GE','기하']].map(([ex,nm])=>`<div class="ut">${nm}</div>${CONCEPTS.filter(c=>c.ex===ex).map(c=>`<label class="fin"><input type="checkbox" data-final="${c.id}" ${finalIds().includes(c.id)?'checked':''}><span>${esc(c.t)}</span></label>`).join('')}`).join('')}
   <p class="small muted" style="margin-top:8px">지금 ${finalIds().length}개 유형 선택됨</p>
   </div>
-  <div class="card"><h3>저장</h3><p class="muted small"><span id="sync" class="sync"></span><br>학습 기록은 이 기기의 브라우저에 저장돼요. 같은 기기·같은 브라우저로 들어오면 이어서 할 수 있고, 브라우저 기록을 지우면 함께 지워져요.</p>
+  <div class="card"><h3>저장</h3><p class="muted small">앱 버전 <b>${APPVER}</b> <button class="mini" onclick="hardRefresh()">🔄 최신 버전으로 새로고침</button><br><span id="sync" class="sync"></span><br>학습 기록은 이 기기의 브라우저에 저장돼요. 같은 기기·같은 브라우저로 들어오면 이어서 할 수 있고, 브라우저 기록을 지우면 함께 지워져요.</p>
   <button class="ghost wide" data-act="reset">기록 전체 초기화</button><div id="resetbox"></div></div>`;
 }
 
@@ -1284,7 +1284,7 @@ function lpConcepts(){const ids=rangeIds();const units=[...new Set(ids.map(id=>C
   return `<div class="lplist">${units.map(u=>`<div class="lpu">${esc(UNITS[u].t)}</div>`+ids.filter(id=>C[id].u===u).map(id=>`<button data-lpc="${id}"><i class="${dot(id)}"></i><span>${esc(C[id].t)}</span>${!(S.c[id]&&S.c[id].seen)?'<em>NEW</em>':''}</button>`).join('')).join('')}</div>`}
 function lpPick(){ask('📘','어떤 개념으로 15분 할까요?','고른 개념으로 플래시 복습 → 백지 테스트 → 맞춤 문제가 열려요.',[],'닫기',lpConcepts())}
 function lpOpen(){const t=dailyToday?dailyToday():0;const ch=chooseBlank();
-  ask('🚌','오늘은 무엇부터 할까요?','',[],'둘러보기',
+  ask('🚌','오늘은 무엇부터 할까요?','<span style="font-size:11px;opacity:.6">앱 버전 '+APPVER+'</span>',[],'둘러보기',
    `<button class="lpbig d" data-lp="daily">📅 오늘의 3문제${t>=3?' (완료 ✓)':t?` (${t}/3)`:''}<small>${(typeof retryLeft==='function'&&retryLeft())?'지난 오답부터 다시 풀고 새 3문제':'시험 대비 매일 3문제'}</small></button>
     <button class="lpbig s" data-lp="auto">✨ 추천 15분<small>${esc(C[ch.cid].t)}${ch.isNew?' · NEW':' · 복습'}</small></button>
     <button class="lpbig c" data-lp="pick">📘 개념 골라서 15분<small>내가 고른 개념으로 백지 테스트</small></button>`)}
@@ -1294,5 +1294,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-lp],[data-
 (function lpBoot(n){const md=document.getElementById('modal');if(md&&md.classList.contains('on')){if(n<40)setTimeout(()=>lpBoot(n+1),500);return}
   if(VIEW==='home'&&!RUN)lpOpen()})(0);
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).catch(()=>{}))</script></body>
+<script>if("serviceWorker" in navigator){const had=!!navigator.serviceWorker.controller;let rl=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(had&&!rl){rl=true;location.reload()}});addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{}))}
+async function hardRefresh(){try{if(window.caches){for(const k of await caches.keys())await caches.delete(k)}if(navigator.serviceWorker){for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister()}}catch(e){}location.replace(location.pathname+"?r="+Date.now())}</script></body>
 </html>
