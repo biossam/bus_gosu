@@ -1294,5 +1294,5 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-lp],[data-
 (function lpBoot(n){const md=document.getElementById('modal');if(md&&md.classList.contains('on')){if(n<40)setTimeout(()=>lpBoot(n+1),500);return}
   if(VIEW==='home'&&!RUN)lpOpen()})(0);
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))</script></body>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).catch(()=>{}))</script></body>
 </html>
