@@ -784,7 +784,14 @@ function bFace(B,closed){
 }
 const face=(c,closed)=>isB(c)?bFace(c,closed):catFace(c,closed);
 function seededPerm(seed){const a=BREEDS.map((_,i)=>i);let x=(seed*2654435761)>>>0||7;for(let i=a.length-1;i>0;i--){x=(x*1103515245+12345)>>>0;const j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
-function B(slot){const st=S.catStart||today();const k=CAT_ORDER.indexOf(slot);return BREEDS[seededPerm(st)[k<0?0:k]]}
+function B(slot){const st=S.catStart||today();const k=CAT_ORDER.indexOf(slot);
+  // 아직 도감에 없는 친구부터: 그날 자리마다 한 번 정하면 하루 동안 그대로
+  if(!S.catPick||S.catPick.d!==st)S.catPick={d:st,m:{}};const m=S.catPick.m;
+  if(m[slot]!=null&&BREEDS[m[slot]])return BREEDS[m[slot]];
+  const dx=S.dex||{},used=new Set(Object.values(m));
+  const perm=seededPerm(st*7919+((S.seedX=S.seedX||Math.floor(Math.random()*1e6))));
+  let pick=perm.find(i=>!dx[i]&&!used.has(i));if(pick==null)pick=perm.find(i=>!used.has(i));if(pick==null)pick=perm[k<0?0:k];
+  m[slot]=pick;save();return BREEDS[pick]}
 function dexHTML(){const dx=S.dex||{};const n=Object.keys(dx).length;
   return `<div class="dex">${BREEDS.map(b=>dx[b.i]?`<button class="dexi on" data-dexb="${b.i}"><svg viewBox="0 -2 40 36" width="44" height="40">${bFace(b)}</svg><span>${esc(b.n)}</span></button>`:`<div class="dexi"><svg viewBox="0 -2 40 36" width="44" height="40" class="sil">${bFace(b)}</svg><span>???</span></div>`).join('')}</div><p class="small muted center">${n}/${BREEDS.length}종 만났어요</p>`}
 function openDex(){ask('📖','강아지 도감','문제 세트를 끝까지 풀 때마다 숨은 강아지가 나타나요. 찾으면 도감에 모여요. 7일 연속 공부하면 한 마리를 선물로 받아요! 하루 쉴 때마다 도감의 강아지 중 한 마리가 집을 나가요.',[],'닫기',dexHTML())}
