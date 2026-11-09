@@ -421,7 +421,7 @@ function recordProblem(pr,ok){
   const wi=S.wrong.findIndex(w=>w.id===pr.id);
   if(!ok){if(wi<0){S.wrong.push({id:pr.id,cid:pr.cid,day:today(),g:pr.gen?{l:pr.l,t:pr.t,q:pr.q,x:pr.x,s:pr.s}:null});if(S.wrong.length>150)S.wrong.shift()}c.due=Math.min(c.due||today()+1,today()+1)}
   else if(wi>=0&&S.wrong[wi].day<today())S.wrong.splice(wi,1);
-  if(RUN&&RUN.mode==='daily'){S.daily=S.daily||{done:{},log:{}};S.daily.miss=S.daily.miss||{};const mk=pr.mid||pr.id;if(ok){if(!pr.gen)S.daily.done[pr.id]=today();delete S.daily.miss[mk]}else S.daily.miss[mk]={cid:pr.cid,l:pr.l,t:pr.t,day:today()};if(!pr.retry){const dk=dayStr(today());S.daily.log[dk]=(S.daily.log[dk]||0)+1}}
+  if(RUN&&RUN.mode==='daily'){S.daily=S.daily||{done:{},log:{}};S.daily.miss=S.daily.miss||{};const mk=pr.mid||pr.id;if(ok){if(!pr.gen)S.daily.done[pr.id]=today();if(pr.mid)S.daily.done[pr.mid]=today();delete S.daily.miss[mk]}else S.daily.miss[mk]={cid:pr.cid,l:pr.l,t:pr.t,day:today()};if(!pr.retry){const dk=dayStr(today());S.daily.log[dk]=(S.daily.log[dk]||0)+1}}
   const d=dayRec();d.probs++;if(ok)d.ok++;save();
 }
 function recordBlank(cid,score,probAcc){
