@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>버스 15분 상황매칭론</title>
+<title>버스고수</title>
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -11,24 +11,64 @@
 <meta name="theme-color" content="#FFF8EE">
 <meta property="og:title" content="버스 15분 상황매칭론">
 <meta property="og:image" content="icon-512.png">
-<meta http-equiv="refresh" content="1;url=https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL">
 <style>
-:root{color-scheme:light dark;--bg:#FFF8EE;--ink:#2A2A35;--sub:#77778A}
-@media (prefers-color-scheme:dark){:root{--bg:#1D1C22;--ink:#F2EFE8;--sub:#A6A3B0}}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;text-align:center;padding:16px;box-sizing:border-box}
-img{width:120px;height:120px;border-radius:28px;animation:hop 1s ease-in-out infinite}
-@keyframes hop{50%{transform:translateY(-6px)}}
-h1{font-size:22px;margin:14px 0 4px}p{color:var(--sub);font-size:14px;margin:0 0 18px}
-a{display:inline-block;background:#5B8DEF;color:#fff;text-decoration:none;font-weight:700;border-radius:14px;padding:12px 22px;box-shadow:0 4px 0 #3D6BC6}
+:root{color-scheme:light;--bg:#FFF8EE;--ink:#2A2A35;--sub:#77778A;--line:#F0E5D3;--c:#5B8DEF;--cd:#3D6BC6}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;display:flex;justify-content:center;padding:28px 16px 40px}
+main{width:100%;max-width:420px;text-align:center}
+img.ic{width:104px;height:104px;border-radius:26px;box-shadow:0 3px 0 var(--line)}
+h1{font-size:24px;margin:14px 0 2px}.sub{color:var(--sub);font-size:14px;margin:0 0 20px}
+.go{display:block;text-align:center;background:var(--c);color:#fff;text-decoration:none;font-weight:700;font-size:18px;border-radius:16px;padding:15px;box-shadow:0 4px 0 var(--cd);margin-bottom:22px}
+.card{background:#fff;border:2px solid var(--line);border-radius:18px;padding:16px 16px 10px;text-align:left;margin-bottom:12px}
+.card h2{font-size:16px;margin:0 0 8px}.card ol{margin:0;padding-left:20px}.card li{margin:0 0 8px;line-height:1.6;font-size:15px}
+.card b{color:var(--cd)}.hide{display:none}
+.warn{background:#FFE7E2;border-color:#FFC9BF}.warn button{font:inherit;font-weight:700;border:0;border-radius:12px;background:#FF7563;color:#fff;padding:10px 14px;margin:4px 0 8px}
+.step{background:#E6F4FF;border-color:#BFD7EA}
+.small{font-size:13px;color:var(--sub);line-height:1.6}
 </style>
 </head>
 <body>
 <main>
-<img src="icon-512.png" alt="">
-<h1>버스 15분 상황매칭론</h1>
-<p>버스가 출발해요… 잠시만요 🚌</p>
-<a href="https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL">바로 열기</a>
+<img class="ic" src="icon-512.png" alt="">
+<h1>버스고수</h1>
+<p class="sub">버스 15분 상황매칭론</p>
+<a class="go" href="https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL">공부하러 가기</a>
+
+<div class="card warn hide" id="inapp"><h2>⚠️ 카카오톡·인스타 안에서 열렸어요</h2>
+<p class="small">이 화면에서는 홈 화면에 추가할 수 없어요. <b>Safari</b>(아이폰) 또는 <b>Chrome</b>(안드로이드)으로 열어 주세요.</p>
+<button id="ext">기본 브라우저로 열기</button>
+<p class="small">버튼이 안 되면 오른쪽 위 ⋯ / ⋮ 메뉴에서 ‘다른 브라우저로 열기’를 누르세요.</p></div>
+
+<div class="card step hide" id="addnow"><h2>👍 지금 이 화면에서 추가하세요</h2>
+<ol><li id="addios">아래 <b>공유 버튼(□↑)</b> → <b>홈 화면에 추가</b> → <b>추가</b></li>
+<li id="addand">오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b> → <b>추가</b></li></ol>
+<p class="small">추가한 아이콘을 누르면 바로 공부 화면으로 넘어가요.</p></div>
+
+<div class="card" id="howto"><h2>📲 홈 화면에 추가하기</h2>
+<ol><li>아래 버튼을 눌러 <b>홈 화면용 페이지</b>로 가요.</li>
+<li>그 화면에서 안내대로 <b>홈 화면에 추가</b>를 눌러요.</li></ol>
+<a class="go" style="margin:10px 0 6px;font-size:16px;padding:12px" href="./?app=1">홈 화면용 페이지 열기</a></div>
+
+<p class="small">처음 한 번은 Claude에 로그인해 두세요. 같은 계정이면 휴대폰·태블릿·컴퓨터에서 기록이 이어져요.</p>
 </main>
-<script>try{location.replace("https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL")}catch(e){}</script>
+<script>
+(function(){
+  var URL_="https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL", ua=navigator.userAgent||'', q=location.search;
+  var inapp=/KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|Line\/|DaumApps|everytimeApp/i.test(ua);
+  var isAnd=/Android/i.test(ua), standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+  var fromHere=document.referrer&&document.referrer.indexOf(location.host)>-1;
+  if(inapp){document.getElementById('inapp').classList.remove('hide');
+    document.getElementById('ext').onclick=function(){var here=location.href.split('#')[0];
+      if(/KAKAOTALK/i.test(ua)){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(here);return}
+      if(isAnd){location.href='intent://'+here.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return}
+      alert('오른쪽 위 메뉴에서 Safari로 열기를 눌러 주세요.')};return}
+  if(/[?&]app=1/.test(q)){
+    if(standalone||!fromHere){location.replace(URL_);return}
+    document.getElementById('howto').classList.add('hide');
+    document.getElementById('addnow').classList.remove('hide');
+    document.getElementById(isAnd?'addios':'addand').classList.add('hide');
+  }
+})();
+</script>
 </body>
 </html>
