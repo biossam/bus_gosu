@@ -1262,5 +1262,5 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-rec]');if(
   if(a==='start')recStart();else if(a==='stop'){if(REC.mr)REC.mr.stop()}else if(a==='again'){if(REC.url)URL.revokeObjectURL(REC.url);REC.url=null;recStart()}},true);
 document.addEventListener('change',e=>{const i=e.target.closest('[data-recfile]');if(!i||!i.files||!i.files[0])return;if(REC.url)URL.revokeObjectURL(REC.url);REC.url=URL.createObjectURL(i.files[0]);REC.err=false;recPaint()});
 </script>
-</body>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))</script></body>
 </html>
