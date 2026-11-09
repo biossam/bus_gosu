@@ -290,7 +290,7 @@ details:not([open]) summary h3::after{transform:rotate(-90deg)}
 .recbox .rbtn.stop{background:#2B2B38}.recbox .rbtn.ghost{background:transparent;color:var(--sub,#8a7f72);border:1.5px solid var(--line,#E9DCC6)}
 .recbox .rt{font-variant-numeric:tabular-nums;font-weight:800}.recbox .dot{width:10px;height:10px;border-radius:50%;background:#FF4B3A;animation:rblink 1s infinite}@keyframes rblink{50%{opacity:.2}}
 .recbox audio,.recplay audio{width:100%;margin-top:8px}.recbox .rfile{display:inline-block;font-size:13px;color:var(--sub,#8a7f72);text-decoration:underline;cursor:pointer}.recplay{margin:10px 0}
-</style>
+.rtnote{margin:6px 0 10px;padding:8px 12px;border-radius:12px;background:var(--coralL);font-size:13px}</style>
 </head>
 <body>
 <main id="main"></main>
@@ -421,7 +421,7 @@ function recordProblem(pr,ok){
   const wi=S.wrong.findIndex(w=>w.id===pr.id);
   if(!ok){if(wi<0){S.wrong.push({id:pr.id,cid:pr.cid,day:today(),g:pr.gen?{l:pr.l,t:pr.t,q:pr.q,x:pr.x,s:pr.s}:null});if(S.wrong.length>150)S.wrong.shift()}c.due=Math.min(c.due||today()+1,today()+1)}
   else if(wi>=0&&S.wrong[wi].day<today())S.wrong.splice(wi,1);
-  if(RUN&&RUN.mode==='daily'){S.daily=S.daily||{done:{},log:{}};S.daily.miss=S.daily.miss||{};const mk=pr.mid||pr.id;if(ok){if(!pr.gen)S.daily.done[pr.id]=today();delete S.daily.miss[mk]}else S.daily.miss[mk]={cid:pr.cid,l:pr.l,t:pr.t,day:today()};const dk=dayStr(today());S.daily.log[dk]=(S.daily.log[dk]||0)+1}
+  if(RUN&&RUN.mode==='daily'){S.daily=S.daily||{done:{},log:{}};S.daily.miss=S.daily.miss||{};const mk=pr.mid||pr.id;if(ok){if(!pr.gen)S.daily.done[pr.id]=today();delete S.daily.miss[mk]}else S.daily.miss[mk]={cid:pr.cid,l:pr.l,t:pr.t,day:today()};if(!pr.retry){const dk=dayStr(today());S.daily.log[dk]=(S.daily.log[dk]||0)+1}}
   const d=dayRec();d.probs++;if(ok)d.ok++;save();
 }
 function recordBlank(cid,score,probAcc){
@@ -880,9 +880,10 @@ function similarTo(mid,m){const C0=C[m.cid];if(!C0)return null;
   return pool(m.cid).find(p=>p.id===mid)||null}
 function pickDaily(){
   const t0=today(),miss=Object.entries((S.daily&&S.daily.miss)||{}).filter(([k,m])=>m.day<t0||dailyToday()>=3).sort((a,b)=>a[1].day-b[1].day);
-  const re=[];for(const [k,m] of miss){if(re.length>=2)break;const q=similarTo(k,m);if(q&&!re.some(x=>x.id===q.id))re.push(Object.assign({},q,{mid:k,retry:true}))}
+  const re=[];for(const [k,m] of miss){if(re.length>=5)break;const q=similarTo(k,m);if(q&&!re.some(x=>x.id===q.id))re.push(Object.assign({},q,{mid:k,retry:true}))}
   const MS=(S.daily&&S.daily.miss)||{};const pre=pickDaily0().filter(p=>!MS[p.id]&&!re.some(r=>r.id===p.id));
-  return re.map(prepare).concat(pre).slice(0,3)}
+  const td=dailyToday(),need=td>=3?3:3-td;return re.map(prepare).concat(pre.slice(0,need))}
+function retryLeft(){const t0=today();return Object.values((S.daily&&S.daily.miss)||{}).filter(m=>m.day<t0).length}
 function pickDaily0(){
   const left=dailyPool().map(p=>{const m=mastery(p.cid);return {p,w:(m==null?.5:m)-(p.h?.35:0)+Math.random()*.35}}).sort((a,b)=>a.w-b.w).map(x=>x.p);
   const out=[],cids=new Set();
@@ -899,7 +900,7 @@ function dailyHTML(){
   const enough=avail>=need;
   return `<div class="card daily"><div class="dhead"><h3>📅 시험까지 하루 3문제</h3><span class="dday sm">D−${D}</span></div>
    <div class="dprog">${[0,1,2].map(i=>`<i class="${i<t?'f':''}"></i>`).join('')}</div>
-   <button class="big ${t>=3?'alt':''}" data-act="daily">${t>=3?'오늘 3문제 완료 ✓ · 3문제 더':t?`이어서 풀기 (${t}/3)`:'오늘의 3문제 풀기 ▶'}</button>
+   ${retryLeft()?`<p class="rtnote">🔁 어제까지 틀린 문제 <b>${Math.min(5,retryLeft())}개</b>를 비슷한 문제로 먼저 다시 풀어요.</p>`:''}<button class="big ${t>=3?'alt':''}" data-act="daily">${t>=3?'오늘 3문제 완료 ✓ · 3문제 더':t?`이어서 풀기 (${t}/3)`:'오늘의 3문제 풀기 ▶'}</button>
    <details class="dchg"><summary>시험 날짜 바꾸기</summary>${dateIn}</details></div>`;
 }
 function mapBody(){const ids=rangeIds();const units=[...new Set(ids.map(id=>C[id].u))];
@@ -1199,7 +1200,7 @@ document.addEventListener('click',e=>{
   if(d.pn){PRACT.n=+d.pn;render();return}
   const a=d.act;const st=RUN&&RUN.steps[RUN.i];
   if(a==='start')return startSession();
-  if(a==='daily'){const t=dailyToday();const l=pickDaily();if(t>0&&t<3)l.length=3-t;return startProbs(l,'오늘의 3문제','daily')}
+  if(a==='daily'){const rn=Math.min(5,retryLeft());const l=pickDaily();return startProbs(l,rn?`지난 오답 ${rn} + 오늘의 3문제`:'오늘의 3문제','daily')}
   if(a==='exam'){return startExam()}
   if(a==='pskip'){const st=RUN.steps[RUN.i];st.list.push(st.list.splice(st.j,1)[0]);st.skipped=(st.skipped||0)+1;st.reveal=false;toast('맨 뒤로 보냈어요. 나중에 다시 나와요');render();return}
   if(a==='mix'){const ids=rangeIds();return startProbs(practiceList(shuffle(ids),PRACT.n),'범위 섞어 풀기')}
