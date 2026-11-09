@@ -1,7 +1,7 @@
 # 버스고수 · 상황매칭론 수학
 
-짧은 주소 · 홈 화면 아이콘용 바로가기입니다. 열면 Claude에 있는 사이트로 넘어갑니다.
+학습 사이트입니다. 첫 화면(index.html)에서 홈 화면에 추가하고, 공부는 app.html에서 합니다.
 
 - 바로가기: https://biossam.github.io/bus_gosu/
-- 사이트: https://claude.ai/artifact/5pp7ozSLJeW5epBLLxb4dL
-- Claude에 로그인해서 열면 학습 기록이 기기 간에 이어집니다.
+- 앱: app.html (마이크 녹음 가능)
+- 로그인 없이 쓰며, 학습 기록은 각 기기의 브라우저에 저장됩니다.
