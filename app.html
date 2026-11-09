@@ -1248,7 +1248,9 @@ function recPaint(){const el=document.getElementById('recbox');if(el&&REC.st)el.
 async function recStart(){
   try{
     if(!navigator.mediaDevices||!window.MediaRecorder)throw 0;
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    if(!/github\.io$|^localhost$/.test(location.hostname)&&location.protocol!=='file:')throw 0;
+    REC.err=false;const rb=document.querySelector('[data-rec="start"]');if(rb){rb.textContent='🎙 마이크 연결 중…';rb.disabled=true}
+    const stream=await Promise.race([navigator.mediaDevices.getUserMedia({audio:true}),new Promise((_,rj)=>setTimeout(()=>rj(0),8000))]);
     const mr=new MediaRecorder(stream);REC.mr=mr;REC.chunks=[];
     mr.ondataavailable=e=>{if(e.data&&e.data.size)REC.chunks.push(e.data)};
     mr.onstop=()=>{stream.getTracks().forEach(t=>t.stop());clearInterval(REC.iv);if(REC.chunks.length){if(REC.url)URL.revokeObjectURL(REC.url);REC.url=URL.createObjectURL(new Blob(REC.chunks,{type:mr.mimeType||'audio/webm'}))}REC.mr=null;recPaint()};
