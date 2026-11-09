@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><script>var APPVER="11-10 01:23"</script><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="버스고수"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF8EE">
+<head><script>var APPVER="11-10 01:52"</script><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="버스고수"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#FFF8EE">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>버스고수</title>
@@ -319,6 +319,7 @@ const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const nz=(a,b)=>{let v=0;while(v===0)v=ri(a,b);return v};
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const N=n=>n<0?'−'+(-n):String(n);
+const PN=n=>n<0?'('+N(n)+')':N(n);
 const pt=(x,y)=>`(${N(x)}, ${N(y)})`;
 function term(co,v,first){if(co===0)return '';const a=Math.abs(co);const s=co<0?(first?'−':' − '):(first?'':' + ');return s+(v?(a===1?'':a)+v:a)}
 function poly(cs,v='x'){let s='';const d=cs.length-1;cs.forEach((co,i)=>{const p=d-i;const vv=p===0?'':p===1?v:v+'^'+p;s+=term(co,vv,!s)});return s||'0'}
@@ -331,18 +332,18 @@ const fact=n=>n<=1?1:n*fact(n-1);
 const nPr=(n,r)=>fact(n)/fact(n-r), nCr=(n,r)=>nPr(n,r)/fact(r);
 
 const GEN={
- a1a(){const s=nz(-4,5),p=nz(-3,4);if(Math.random()<.5){const v=s*s-2*p;return mc(1,`a + b = ${N(s)}, ab = ${N(p)}일 때 a^2 + b^2의 값은?`,N(v),[N(s*s+2*p),N(s*s-p),N(s*s),...numD(v)],`(a + b)^2 − 2ab = ${s*s} − ${N(2*p)} = ${N(v)}`)}
-  const v=s**3-3*p*s;return mc(2,`a + b = ${N(s)}, ab = ${N(p)}일 때 a^3 + b^3의 값은?`,N(v),[N(s**3+3*p*s),N(s**3-p*s),N(s**3),...numD(v)],`(a + b)^3 − 3ab(a + b) = ${N(s**3)} − ${N(3*p*s)} = ${N(v)}`)},
+ a1a(){const s=nz(-4,5),p=nz(-3,4);if(Math.random()<.5){const v=s*s-2*p;return mc(1,`a + b = ${N(s)}, ab = ${N(p)}일 때 a^2 + b^2의 값은?`,N(v),[N(s*s+2*p),N(s*s-p),N(s*s),...numD(v)],`(a + b)^2 − 2ab = ${s*s} − ${PN(2*p)} = ${N(v)}`)}
+  const v=s**3-3*p*s;return mc(2,`a + b = ${N(s)}, ab = ${N(p)}일 때 a^3 + b^3의 값은?`,N(v),[N(s**3+3*p*s),N(s**3-p*s),N(s**3),...numD(v)],`(a + b)^3 − 3ab(a + b) = ${N(s**3)} − ${PN(3*p*s)} = ${N(v)}`)},
  a2a(){const p=ri(-3,3),q=ri(-4,4),r=ri(-5,5),k=nz(-3,3);const f=x=>x**3+p*x*x+q*x+r;const v=f(k);return mc(1,`다항식 ${poly([1,p,q,r])}을 ${poly([1,-k])}로 나눈 나머지는?`,N(v),[N(f(-k)),...numD(v)],`나머지정리: f(${N(k)}) = ${N(v)}`)},
  b1a(){const a=nz(-3,3),b=nz(-3,3),c=nz(-3,3),d=nz(-3,3);const re=a*c-b*d,im=a*d+b*c;return mc(1,`(${cx(a,b)})(${cx(c,d)})를 계산하면?`,cx(re,im),[cx(a*c+b*d,im),cx(re,a*d-b*c),cx(a*c,b*d),cx(re,-im),cx(-re,im)],`i^2 = −1을 이용해 전개: ${cx(re,im)}`)},
  b3a(){const p=nz(-5,5),q=nz(-4,4);const eq=`x^2${term(p,'x',false)}${term(q,'',false)} = 0`;if(Math.random()<.5){const v=p*p-2*q;return mc(1,`이차방정식 ${eq}의 두 근 α, β에 대하여 α^2 + β^2의 값은?`,N(v),[N(p*p+2*q),N(p*p-q),...numD(v)],`α + β = ${N(-p)}, αβ = ${N(q)} → (α + β)^2 − 2αβ = ${N(v)}`)}
-  const v=p*p-4*q;return mc(2,`이차방정식 ${eq}의 두 근 α, β에 대하여 (α − β)^2의 값은?`,N(v),[N(p*p+4*q),N(p*p-2*q),...numD(v)],`(α + β)^2 − 4αβ = ${p*p} − ${N(4*q)} = ${N(v)}`)},
+  const v=p*p-4*q;return mc(2,`이차방정식 ${eq}의 두 근 α, β에 대하여 (α − β)^2의 값은?`,N(v),[N(p*p+4*q),N(p*p-2*q),...numD(v)],`(α + β)^2 − 4αβ = ${p*p} − ${PN(4*q)} = ${N(v)}`)},
  c2a(){const n=ri(4,8),r=ri(2,3);const v=nPr(n,r);return mc(1,`_{${n}}P_{${r}}의 값은?`,N(v),[N(nCr(n,r)),N(n**r),N(nPr(n-1,r)),N(nPr(n,r+1)),...numD(v,1)],`${n}부터 1씩 줄여 ${r}개 곱하기 = ${v}`)},
  c3a(){const n=ri(5,9),r=ri(2,4);const v=nCr(n,r);return mc(1,`_{${n}}C_{${r}}의 값은?`,N(v),[N(nPr(n,r)),N(nCr(n,r-1)),N(nCr(n-1,r)),N(nCr(n+1,r)),...numD(v,1)],`{{_{${n}}P_{${r}}§${r}!}} = {{${nPr(n,r)}§${fact(r)}}} = ${v}`)},
  d2a(){const A=[[ri(-2,3),ri(-2,3)],[ri(-2,3),ri(-2,3)]],B=[[ri(-2,3),ri(-2,3)],[ri(-2,3),ri(-2,3)]];const mul=(X,Y)=>[[X[0][0]*Y[0][0]+X[0][1]*Y[1][0],X[0][0]*Y[0][1]+X[0][1]*Y[1][1]],[X[1][0]*Y[0][0]+X[1][1]*Y[1][0],X[1][0]*Y[0][1]+X[1][1]*Y[1][1]]];const AB=mul(A,B),BA=mul(B,A);const el=[[A[0][0]*B[0][0],A[0][1]*B[0][1]],[A[1][0]*B[1][0],A[1][1]*B[1][1]]];const tw=[[AB[0][0],AB[1][0]],[AB[0][1],AB[1][1]]];const pl=[[AB[0][0]+1,AB[0][1]],[AB[1][0],AB[1][1]-1]];const neg=[[AB[0][0],AB[0][1]+1],[AB[1][0]-1,AB[1][1]]],sw=[[AB[1][0],AB[1][1]],[AB[0][0],AB[0][1]]];return mc(2,`A = ${mat(A)}, B = ${mat(B)}일 때 AB는?`,mat(AB),[mat(BA),mat(el),mat(tw),mat(pl),mat(neg),mat(sw)],`(i, j) 성분 = A의 i행 · B의 j열 → ${mat(AB)}`)},
  e1a(){const T=pick([[3,4,5],[4,3,5],[5,12,13],[12,5,13],[6,8,10],[8,6,10],[8,15,17]]);const ax=ri(-5,5),ay=ri(-5,5),bx=ax+T[0]*pick([1,-1]),by=ay+T[1]*pick([1,-1]);return mc(1,`두 점 A${pt(ax,ay)}, B${pt(bx,by)} 사이의 거리는?`,N(T[2]),[...numD(T[2],1),'√{'+(T[0]+T[1])+'}'],`√{${T[0]}^2 + ${T[1]}^2} = √{${T[2]*T[2]}} = ${T[2]}`)},
  e1b(){const [m,n]=pick([[1,2],[2,1],[1,3],[3,1],[2,3],[3,2]]);let vx=ri(-2,2),vy=ri(-2,2);if(!vx&&!vy)vx=1;const ax=ri(-4,4),ay=ri(-4,4),bx=ax+(m+n)*vx,by=ay+(m+n)*vy;const px=ax+m*vx,py=ay+m*vy;return mc(1,`두 점 A${pt(ax,ay)}, B${pt(bx,by)}에 대하여 선분 AB를 ${m} : ${n}으로 내분하는 점의 좌표는?`,pt(px,py),[pt(ax+n*vx,ay+n*vy),pt(px+1,py),pt(ax-m*vx,ay-m*vy),pt(px,py-1),pt(px-1,py+1)],`x = {{${m} × (${N(bx)}) + ${n} × (${N(ax)})§${m+n}}} = ${N(px)}, y = {{${m} × (${N(by)}) + ${n} × (${N(ay)})§${m+n}}} = ${N(py)}`)},
- e3a(){const [a,b,h]=pick([[3,4,5],[4,3,5],[3,-4,5],[4,-3,5],[5,12,13],[12,-5,13],[6,8,10]]);const x=ri(-3,3),y=ri(-3,3),d=ri(1,3),s=pick([1,-1]);const c=s*d*h-(a*x+b*y);return mc(1,`점 P${pt(x,y)}와 직선 ${lin(a,b,c)} 사이의 거리는?`,N(d),[...numD(d,1),N(d*h)],`{{|${N(a)} × (${N(x)}) + ${N(b)} × (${N(y)}) ${c<0?'−':'+'} ${Math.abs(c)}|§√{${a*a} + ${b*b}}}} = {{${d*h}§${h}}} = ${d}`)},
+ e3a(){const [a,b,h]=pick([[3,4,5],[4,3,5],[3,-4,5],[4,-3,5],[5,12,13],[12,-5,13],[6,8,10]]);const x=ri(-3,3),y=ri(-3,3),d=ri(1,3),s=pick([1,-1]);const c=s*d*h-(a*x+b*y);return mc(1,`점 P${pt(x,y)}와 직선 ${lin(a,b,c)} 사이의 거리는?`,N(d),[...numD(d,1),N(d*h)],`{{|${N(a)} × (${N(x)}) ${b<0?'−':'+'} ${Math.abs(b)} × (${N(y)})${c?(c<0?' − ':' + ')+Math.abs(c):''}|§√{${a*a} + ${b*b}}}} = {{${d*h}§${h}}} = ${d}`)},
  e4a(){const a=nz(-4,4),b=nz(-4,4),r=ri(1,5);const C=a*a+b*b-r*r;const eq=`x^2 + y^2${term(-2*a,'x',false)}${term(-2*b,'y',false)}${term(C,'',false)} = 0`;const sol=`(x ${a<0?'+':'−'} ${Math.abs(a)})^2 + (y ${b<0?'+':'−'} ${Math.abs(b)})^2 = ${r*r}`;
   if(Math.random()<.5)return mc(1,`원 ${eq}의 반지름의 길이는?`,N(r),[N(r*r),...numD(r,1)],sol);
   return mc(1,`원 ${eq}의 중심의 좌표는?`,pt(a,b),[pt(-a,-b),pt(2*a,2*b),pt(-2*a,-2*b),pt(b,a),pt(a,-b)],sol+' → 중심 '+pt(a,b))},
@@ -355,7 +356,7 @@ const GEN={
  g1a(){const m=ri(2,4),n=ri(m,5);if(Math.random()<.5)return mc(1,`n(X) = ${m}, n(Y) = ${n}일 때 X에서 Y로의 함수의 개수는?`,N(n**m),[N(m**n),N(nPr(n,m)),N(n*m),N(nCr(n,m))],`Y의 원소 ${n}개 중 하나씩, ${m}번 → ${n}^${m} = ${n**m}`);return mc(1,`n(X) = ${m}, n(Y) = ${n}일 때 X에서 Y로의 일대일함수의 개수는?`,N(nPr(n,m)),[N(n**m),N(nCr(n,m)),N(fact(n)),N(n*m)],`_{${n}}P_{${m}} = ${nPr(n,m)}`)},
  g2a(){const a=nz(-3,3),b=ri(-4,4),c=nz(-3,3),d=ri(-4,4),k=ri(-2,3);const v=c*(a*k+b)+d,w=a*(c*k+d)+b;return mc(1,`f(x) = ${poly([a,b])}, g(x) = ${poly([c,d])}일 때 (g ∘ f)(${N(k)})의 값은?`,N(v),[N(w),...numD(v)],`f(${N(k)}) = ${N(a*k+b)} → g(${N(a*k+b)}) = ${N(v)}`)},
  g3a(){const a=nz(-3,3),b=ri(-5,5),x0=ri(-3,4);const v=a*x0+b;return mc(1,`f(x) = ${poly([a,b])}일 때 f^{-1}(${N(v)})의 값은?`,N(x0),[N(a*v+b),...numD(x0)],`f(x) = ${N(v)}인 x: ${poly([a,b])} = ${N(v)} → x = ${N(x0)}`)},
- g4a(){const a=nz(-3,3),c=nz(-3,3);let b=ri(-5,5);if(b===a*c)b+=1;return mc(1,`y = {{${poly([a,b])}§${poly([1,c])}}}의 그래프의 점근선은?`,`x = ${N(-c)}, y = ${N(a)}`,[`x = ${N(c)}, y = ${N(a)}`,`x = ${N(-c)}, y = ${N(b)}`,`x = ${N(a)}, y = ${N(-c)}`,`x = ${N(-c)}, y = ${N(-a)}`,`x = ${N(c)}, y = ${N(b)}`,`x = ${N(-c)}, y = ${N(a+1)}`,`x = ${N(1-c)}, y = ${N(a)}`],`y = {{${N(b-a*c)}§x ${c<0?'−':'+'} ${Math.abs(c)}}} + ${N(a)} 꼴 → 점근선 x = ${N(-c)}, y = ${N(a)}`)},
+ g4a(){const a=nz(-3,3),c=nz(-3,3);let b=ri(-5,5);if(b===a*c)b+=1;return mc(1,`y = {{${poly([a,b])}§${poly([1,c])}}}의 그래프의 점근선은?`,`x = ${N(-c)}, y = ${N(a)}`,[`x = ${N(c)}, y = ${N(a)}`,`x = ${N(-c)}, y = ${N(b)}`,`x = ${N(a)}, y = ${N(-c)}`,`x = ${N(-c)}, y = ${N(-a)}`,`x = ${N(c)}, y = ${N(b)}`,`x = ${N(-c)}, y = ${N(a+1)}`,`x = ${N(1-c)}, y = ${N(a)}`],`y = {{${N(b-a*c)}§x ${c<0?'−':'+'} ${Math.abs(c)}}} ${a<0?'−':'+'} ${Math.abs(a)} 꼴 → 점근선 x = ${N(-c)}, y = ${N(a)}`)},
  g5a(){const a=pick([1,2,3,-1,-2,-3]),p=ri(-3,3),q=ri(-3,3),s=pick([1,-1]);const inside=a===1?`x${term(-p,'',false)}`:a===-1?`−x${term(p,'',false)}`:`${N(a)}x${term(-a*p,'',false)}`;const f=`y = ${s<0?'−':''}√{${inside}}${term(q,'',false)}`;const dom=a>0?`x ≥ ${N(p)}`:`x ≤ ${N(p)}`,ran=s>0?`y ≥ ${N(q)}`:`y ≤ ${N(q)}`;const dom2=a>0?`x ≤ ${N(p)}`:`x ≥ ${N(p)}`,ran2=s>0?`y ≤ ${N(q)}`:`y ≥ ${N(q)}`;return mc(2,`${f}의 정의역과 치역은?`,`${dom}, ${ran}`,[`${dom2}, ${ran}`,`${dom}, ${ran2}`,`${dom2}, ${ran2}`,`x ≥ ${N(-p)}, ${ran}`],`근호 안 ≥ 0 → ${dom}, 시작점 ${pt(p,q)}에서 ${s>0?'위로':'아래로'} → ${ran}`)}
 };
 
@@ -443,6 +444,7 @@ function curStreak(){return streakInfo().n}
 
 // ===== 문제 고르기 =====
 function pool(cid){return C[cid].pr.map((p,i)=>Object.assign({},p,{id:cid+'-'+i,cid}))}
+for(const k in GEN){const f=GEN[k];GEN[k]=()=>{let q;for(let i=0;i<20;i++){q=f();if(q.t!=='mc'||q.x.length>=4)break}return q}}
 function genOne(cid){const g=C[cid].gen;if(!g)return null;const p=GEN[pick(g)]();return Object.assign(p,{id:cid+'-g'+Math.random().toString(36).slice(2,8),cid,gen:true})}
 const lastSeen=id=>S.p[id]?S.p[id].last:-99;
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
