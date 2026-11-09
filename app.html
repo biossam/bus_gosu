@@ -1243,7 +1243,7 @@ function recHTML(st){if(REC.st!==st)recReset(st);
   const file=`<label class="rfile">마이크가 안 되면 휴대폰 녹음기로 녹음해서 올리기<input type="file" accept="audio/*" capture data-recfile hidden></label>`;
   if(REC.mr&&REC.mr.state==='recording')return `<div class="rrow"><span class="dot"></span><span class="rt" id="rtime">${recFmt(Date.now()-REC.t0)}</span><button class="rbtn stop" data-rec="stop">■ 녹음 끝내기</button></div>`;
   if(REC.url)return `<div class="rrow"><b>🎙 녹음 완료</b><button class="rbtn ghost" data-rec="again">다시 녹음</button></div><audio controls src="${REC.url}"></audio>`;
-  return `<div class="rrow"><button class="rbtn" data-rec="start">🎙 말로 설명하며 녹음하기</button></div><p class="muted small" style="margin:6px 0 0">${REC.err?'마이크를 쓸 수 없어요. 아래 방법으로 올려 주세요. ':'선생님께 설명하듯 소리 내어 말해 보세요. 녹음은 채점할 때 다시 들을 수 있어요(이 기기에만, 잠시 보관). '}</p>${file}`}
+  return `<div class="rrow"><button class="rbtn" data-rec="start">🎙 말로 설명하며 녹음하기</button></div><p class="muted small" style="margin:6px 0 0">${REC.err?(/github\.io$/.test(location.hostname)?'마이크를 쓸 수 없어요. 휴대폰 설정에서 이 브라우저의 마이크를 허용하거나, 아래 방법으로 올려 주세요. ':'이 화면에서는 마이크가 막혀 있어요. <a href="https://biossam.github.io/bus_gosu/app.html" target="_blank" rel="noopener"><b>녹음되는 앱에서 열기</b></a> 또는 아래 방법으로 올려 주세요. '):'선생님께 설명하듯 소리 내어 말해 보세요. 녹음은 채점할 때 다시 들을 수 있어요(이 기기에만, 잠시 보관). '}</p>${file}`}
 function recPaint(){const el=document.getElementById('recbox');if(el&&REC.st)el.innerHTML=recHTML(REC.st)}
 async function recStart(){
   try{
