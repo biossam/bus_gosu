@@ -1135,10 +1135,10 @@ function probsHTML(st){
   if(p.t==='mc')ui=`<div class="opts">${p.order.map((oi,k)=>{let cls='';if(a){if(oi===0)cls='right';else if(a.pick===oi)cls='wrong';}return `<button class="opt ${cls}" data-pick="${oi}" ${a?'disabled':''}><span class="on">${'①②③④⑤'[k]}</span><span>${fmt(p.x[oi])}</span></button>`}).join('')}</div>`;
   else if(p.t==='ox')ui=`<div class="ox">${[true,false].map(v=>{let cls='';if(a){if(v===p.x)cls='right';else if(a.pick===v)cls='wrong'}return `<button class="oxb ${cls}" data-ox="${v}" ${a?'disabled':''}>${v?'O':'X'}</button>`}).join('')}</div>`;
   else if(p.t==='sa')ui=a?`<div class="saans">내 답: <b>${esc(a.val||'(빈칸)')}</b> · 정답: <b>${fmt(String(p.x).split('|')[0])}</b></div>`:`<div class="sa"><input id="sain" inputmode="text" autocomplete="off" placeholder="답 입력 (예: −3, 5/2)"><button class="btn" data-act="sacheck">확인</button></div>`;
-  else if(p.t==='self')ui=a?'':`<p class="muted small">노트에 풀이를 쓴 다음 모범 풀이와 비교해요.</p>${a===null&&st.reveal?'':`<button class="btn wide" data-act="reveal">모범 풀이 보기</button>`}`;
+  else if(p.t==='self')ui=a?'':`<p class="muted small">노트에 풀이를 쓴 다음 모범 풀이와 비교해요.</p>${st.reveal?'':`<div id="recbox" class="recbox">${recHTML(recKey(st))}</div>`}${a===null&&st.reveal?'':`<button class="btn wide" data-act="reveal">모범 풀이 보기</button>`}`;
   if(RUN&&RUN.mode==='exam'&&!a&&!st.reveal&&st.j<st.list.length-1)ui+=`<button class="ghost wide skipb" data-act="pskip">⏭ 나중에 풀기 (맨 뒤로 보내기)</button>`;
   let fb='';
-  if(p.t==='self'&&st.reveal&&!a)fb=`<div class="sol"><b>모범 풀이</b><div>${fmt(p.s)}</div></div>${p.ck?`<div class="ckl"><b>✍️ 서술형 감점 체크 — 내 답안에 다 썼나요?</b>${p.ck.map(c=>`<label><input type="checkbox"> <span>${fmt(c)}</span></label>`).join('')}<p class="small muted">하나라도 빠졌으면 부분 점수가 깎여요.</p></div>`:''}<div class="two"><button class="rate r0" data-self="0">틀렸어요</button><button class="rate r2" data-self="1">맞았어요</button></div>`;
+  if(p.t==='self'&&st.reveal&&!a)fb=`${(REC.st===recKey(st)&&REC.url)?`<div class="card recplay"><b>🎙 내 풀이 녹음 듣기</b><audio controls src="${REC.url}"></audio></div>`:''}<div class="sol"><b>모범 풀이</b><div>${fmt(p.s)}</div></div>${p.ck?`<div class="ckl"><b>✍️ 서술형 감점 체크 — 내 답안에 다 썼나요?</b>${p.ck.map(c=>`<label><input type="checkbox"> <span>${fmt(c)}</span></label>`).join('')}<p class="small muted">하나라도 빠졌으면 부분 점수가 깎여요.</p></div>`:''}<div class="two"><button class="rate r0" data-self="0">틀렸어요</button><button class="rate r2" data-self="1">맞았어요</button></div>`;
   if(a)fb=`<div class="fb ${a.ok?'ok':'no'}">${a.ok?'정답! 👏':'아쉬워요 — 오답노트에 담았어요'}</div><div class="sol"><b>풀이</b><div>${fmt(p.s)}</div></div><button class="big" data-act="pnext">${st.j+1<st.list.length?'다음 문제 ▶':'결과 보기 ▶'}</button>`;
   return ptimerHTML(st,p)+`<p class="step">문제 ${st.j+1} / ${st.list.length} ${st.levelNote&&st.j===0?`<span class="note">${st.levelNote}</span>`:''}</p>
   <div class="qmeta"><span class="tag s">${esc(C[p.cid].t)}</span><span class="tag lv${p.l}">${LV[p.l]}</span><span class="tag ty">${TY[p.t]}</span>${p.src?`<span class="tag ${p.ex?'hp':'src'}">${esc(p.src)}</span>`:''}${p.retry?'<span class="tag rt">오답 재도전</span>':''}</div>
@@ -1243,6 +1243,7 @@ initSync();
 document.addEventListener('change',e=>{const c=e.target.closest('[data-final]');if(!c)return;const id=c.dataset.final;let f=finalIds().slice();if(c.checked){if(!f.includes(id))f.push(id)}else f=f.filter(x=>x!==id);if(!f.length){c.checked=true;toast('최소 한 유형은 골라야 해요');return}S.final=CONCEPTS.map(x=>x.id).filter(x=>f.includes(x));save();render()});
 
 // ===== REC_PATCH: 백지 테스트 녹음 =====
+function recKey(st){if(!st._rid)st._rid=Math.random().toString(36).slice(2);return st._rid+':'+st.j}
 const REC={st:null,mr:null,chunks:[],url:null,t0:0,iv:null,err:false};
 function recReset(st){if(REC.mr&&REC.mr.state!=='inactive'){try{REC.mr.stop()}catch(e){}}if(REC.url)URL.revokeObjectURL(REC.url);clearInterval(REC.iv);Object.assign(REC,{st,mr:null,chunks:[],url:null,t0:0,iv:null})}
 function recFmt(ms){const t=Math.floor(ms/1000);return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
